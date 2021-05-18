@@ -1,0 +1,199 @@
+1616775540962:run
+1616777562930:compile
+1616777596224:[1;3D:q
+1616777639358:compile
+1616777710486:run
+1616779327389:compile
+1617375445951:run
+1617446158907:compile
+1617446274209:run
+1617463853774:compile
+1617464012680:run
+1617465438708:[A
+1617465440211:run
+1617465503137:japanese scream sumeno
+1617465507249:run
+1617466221150:[A
+1617466222893:run
+1617533609433:compile
+1617534396457:run
+1617535644077:un
+1617535645191:run
+1617541398102:compile
+1617541444096:run
+1617541529584:compile
+1617548188199:run
+1617548342659:compile
+1617548344128:run
+1617549571956:compile
+1617549814700:run
+1617551944484:compile
+1617551962748::w
+1617552025541:compile
+1617552538955:run
+1617552705972:compile
+1617553271579:run
+1617553442986:compile
+1617553444911:run
+1617554713787:compile
+1617555689616:run
+1617618977957:compile
+1617619082568:run
+1617621704996:compile
+1617621745215:ompile
+1617621747976:compile
+1617625869775:run
+1617635824817:compile
+1617635901156::w
+1617636849128:compile
+1617636922555:run
+1617637436489:compile
+1617638226071:run
+1617638615864:un
+1617638616751:run
+1617638929258:compile
+1617638932373:run
+1617639345204:compile
+1617639346876:run
+1617639854329:un
+1617639855586:run
+1617642258422:compile
+1617642725974:[1;3Ccompile
+1617642727919:compile
+1617642964873:runcompile
+1617642966543:compile
+1617642969259:run
+1617643073838:compile
+1617643075784:run
+1617650014066:compile
+1617650062620:run
+1617650116470:compile
+1617650118440:run
+1617650861297:compile
+1617652075303:run
+1617653133126:compile
+1617653192318:[1;3Dcompile
+1617653193738:compile
+1617653390918:run
+1617653447792:compile
+1617653505167:run
+1617654764946:compile
+1617654775922:run
+1617721104309:compile
+1617964611396:run
+1621343558137:run rogue.RogueServer 8080
+1621343605871:sbt "run-main rogue.RogueServer" 8080
+1621343616698:sbt run-main rogue.RogueServer 8080
+1621343631977:run-main rogue.RogueServer 8080
+1621343639923:runMain rogue.RogueServer 8080
+1621343942146:compile
+1621346120747:runMain rogue.RogueServer 8080
+1621346142735:runMain rogue.RogueClient
+1621346149584:runMain rogue.RogueClient localhost 8080
+1621346248505:runMain rogue.RogueServer 8080
+1621346877963:compile
+1621346912397:runMain rogue.RogueServer 8080
+1621346915633:runMain rogue.RogueClient localhost 8080
+1621347154207:runMain rogue.RogueServer 8080
+1621347684520:compile
+1621347843922:runMain rogue.RogueServer 8080
+1621347847415:runMain rogue.RogueClient localhost 8080
+1621347927443:runMain rogue.RogueServer 8080
+1621348069733:runMain rogue.RogueClient localhost 8080
+1621348248773:runMain rogue.RogueServer 8080
+1621348355096:runMain rogue.RogueClient localhost 8080
+1621348424724:runMain rogue.RogueServer 8080
+1621348539218:runMain rogue.RogueClient localhost 8080
+1621349103931:runMain rogue.RogueServer 8080
+1621349266014:runMain rogue.RogueClient localhost 8080
+1621350189965:runMain rogue.RogueServer 8080
+1621350328387:compile
+1621350353136:runMain rogue.RogueServer 8080
+1621350851914:compile
+1621350854145:runMain rogue.RogueServer 8080
+1621350859307:runMain rogue.RogueClient localhost 8080
+1621351470095:runMain rogue.RogueServer 8080
+1621351548690:runMain rogue.RogueClient localhost 8080
+1621352425035:compile
+1621352579715:runMain rogue.RogueClient localhost 8080
+1621352583771:compile
+1621352588096:runMain rogue.RogueServer 8080
+1621352663326:compile
+1621352665824:runMain rogue.RogueServer 8080
+1621352671273:runMain rogue.RogueClient localhost 8080
+1621352794386:runMain rogue.RogueServer 8080
+1621352865907:runMain rogue.RogueClient localhost 8080
+1621352941776:runMain rogue.RogueServer 8080
+1621352977793:runMain rogue.RogueClient localhost 8080
+1621352979329:runMain rogue.RogueServer 8080
+1621352982028:runMain rogue.RogueClient localhost 8080
+1621353044497:runMain rogue.RogueServer 8080
+1621353159699:runMain rogue.RogueClient localhost 8080
+1621353256830:runMain rogue.RogueServer 8080
+1621353318028:runMain rogue.RogueClient localhost 8080
+1621353383283:runMain rogue.RogueServer 8080
+1621353446203:runMain rogue.RogueClient localhost 8080
+1621353559890:runMain rogue.RogueServer 8080
+1621353583799:runMain rogue.RogueClient localhost 8080
+1621353690058:runMain rogue.RogueServer 8080
+1621357526644:compile
+1621357883371:runMain rogue.RogueServer 8080
+1621357956659:runMain rogue.RogueClient localhost 8080
+1621358053827:runMain rogue.RogueServer 8080
+1621358118348:runMain rogue.RogueClient localhost 8080
+1621358284843:runMain rogue.RogueServer 8080
+1621358897035:runMain rogue.RogueClient localhost 8080
+1621359033438:runMain rogue.RogueServer 8080
+1621359739011:runMain rogue.RogueClient localhost 8080
+1621359877257:runMain rogue.RogueServer 8080
+1621360090739:runMain rogue.RogueClient localhost 8080
+1621360650122:compile
+1621360953240:runMain rogue.RogueServer 8080
+1621361017407:runMain rogue.RogueClient localhost 8080
+1621361051631:runMain rogue.RogueServer 8080
+1621361093557:runMain rogue.RogueClient localhost 8080
+1621361620821:compile
+1621361743138:runMain rogue.RogueServer 8080
+1621361821016:runMain rogue.RogueClient localhost 8080
+1621361953259:runMain rogue.RogueServer 8080
+1621362157400:runMain rogue.RogueClient localhost 8080
+1621363858723:compile
+1621364018517:runMain rogue.RogueServer 8080
+1621364021580:runMain rogue.RogueClient localhost 8080
+1621364125798:runMain rogue.RogueServer 8080
+1621364208498:runMain rogue.RogueClient localhost 8080
+1621364255726:runMain rogue.RogueServer 8080
+1621364866188:compile
+1621370658312:runMain rogue.RogueServer 8080
+1621370661090:runMain rogue.RogueClient localhost 8080
+1621370714802:runMain rogue.RogueServer 8080
+1621371052700:compile
+1621371140097:runMain rogue.RogueServer 8080
+1621371143945:runMain rogue.RogueClient localhost 8080
+1621371220067:runMain rogue.RogueServer 8080
+1621371282560:runMain rogue.RogueClient localhost 8080
+1621371365353:runMain rogue.RogueServer 8080
+1621371612442:runMain rogue.RogueClient localhost 8080
+1621371617054:runMain rogue.RogueClient localhost 8080
+1621371686176:runMain rogue.RogueServer 8080
+1621371858264:runMain rogue.RogueClient localhost 8080
+1621372083676:runMain rogue.RogueServer 8080
+1621372231996:runMain rogue.RogueClient localhost 8080
+1621372295352:runMain rogue.RogueServer 8080
+1621372356341:runMain rogue.RogueClient localhost 8080
+1621372365906:runMain rogue.RogueClient localhost 8080
+1621372549577:compile
+1621372553965:runMain rogue.RogueServer 8080
+1621372887584:runMain rogue.RogueClient localhost 8080
+1621372892127:runMain rogue.RogueClient localhost 8080
+1621373027556:runMain rogue.RogueServer 8080
+1621373161320:runMain rogue.RogueClient localhost 8080
+1621373166245:runMain rogue.RogueClient localhost 8080
+1621373427246:runMain rogue.RogueServer 8080
+1621373454638:runMain rogue.RogueClient localhost 8080
+1621373458024:runMain rogue.RogueServer 8080
+1621373563391:runMain rogue.RogueClient localhost 8080
+1621373570617:runMain rogue.RogueClient localhost 8080
+1621373698502:runMain rogue.RogueServer 8080
+1621373794959:runMain rogue.RogueClient localhost 8080
+1621373798934:runMain rogue.RogueClient localhost 8080
