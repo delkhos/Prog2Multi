@@ -825,13 +825,8 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
 
 
     for(player <- players){
-      player.update(t)
-      player.status.foreach( s => { 
-          s.effect(this)
-          s.duration-=1
-      })
-
-      player.status.filter( s => {s.duration >0})
+      player.update(t) 
+      player.status.filter( s => {!s.ended})
     }
     for(monster <- monsters){
       monster.update(t)

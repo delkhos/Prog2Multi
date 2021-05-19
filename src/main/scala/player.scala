@@ -16,13 +16,18 @@ class Player(pos: Position, sprite: Sprite, collidable: Boolean, maxHealth: Int,
 }
 
 abstract class Status(sprite: Sprite, argDuration: Int) {
+  var ended = false
   var name = ""
   var duration: Int = argDuration
-  def effect(game: GameObject){}
+  def effect(){}
 }
 
 class Poison(sprite: Sprite, argDuration: Int, target: LivingEntity) extends Status(sprite, argDuration){
-  override def effect(game:GameObject){
+  override def effect(){
+    if (duration <= 0){
+      ended = true
+    }
+
     if (duration % 100 == 0){
       target.health -= 2
     }
@@ -31,16 +36,29 @@ class Poison(sprite: Sprite, argDuration: Int, target: LivingEntity) extends Sta
 
 class Enraged(sprite: Sprite, argDuration: Int, target: LivingEntity) extends Status(sprite, argDuration){
   name = "enraged"
+  override def effect(){  
+    if (duration <= 0){
+      ended = true
+    }
+  }
+
 }
 
 class BronzeSkin(sprite: Sprite, argDuration: Int, target: LivingEntity) extends Status(sprite, argDuration){
   name = "bronzeSkin"
+  override def effect(){  
+    if (duration <= 0){
+      ended = true
+    }
+  }
+
+
 }
 
 
 
 class HealOverTime(sprite: Sprite, argDuration: Int, target: LivingEntity) extends Status(sprite, argDuration){
-  override def effect(game: GameObject){
+  override def effect(){
     target.health+= 3
   }
 }

@@ -41,10 +41,30 @@ abstract class LivingEntity(arg_pos: Position, arg_floor: Int, sprite: Sprite, c
   var attack_cd_max = 300
   def implementationName = this.getClass().getName().stripSuffix("$")
 
+  def removeStatus( statusList: List[Status]): List[Status] = {
+    statusList match {
+      case List() => { return (List()) }
+
+      case (s :: tl) => { 
+        if (s.ended){
+          return removeStatus(tl)
+        }else{
+          return (s :: removeStatus(tl))
+        }
+      }
+    }
+  }
+
+
 
   def update(t: Int){
     move_cd = (move_cd - t).max(0)
     attack_cd = (attack_cd - t).max(0)
+    status.foreach (s => {
+      s.effect()
+      s.duration-=t
+    })
+    this.removeStatus(status)  
   }
 
 
