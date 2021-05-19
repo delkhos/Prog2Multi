@@ -403,9 +403,9 @@ class Renderer {
     val state = game.getString("state")
     if(state == "playing" ){
       drawMapJSON(g, current_size, game, dpos)
-      drawPlayers(g, current_size, game, dpos)
       drawMonstersAndPNJs(g, current_size, game, dpos)
       drawItems(g, current_size, game, dpos)
+      drawPlayers(g, current_size, game, dpos)
       drawUIJSON(g, matrix_dim, ui_dim, game)
       drawStatusJSON(g, matrix_dim, ui_dim, game)
       drawHover(g, mousepos, mousepos_absolute, game, matrix_dim, ui_dim)
