@@ -13,6 +13,7 @@ import org.json._
 class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) { 
   var dim = dim_arg
   val r = scala.util.Random
+  var state = "waiting"
   var floors = List[Map]()
   for(i <- 0 to last_floor){
     floors  = (new MapAutomata(dim,i)) ::floors
@@ -72,8 +73,17 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
   }
 
   def to_json(id: Int): JSONObject = {
+    val json:JSONObject = new JSONObject()
    
     val map_json = new JSONArray()
+    if(state == "waiting"){
+      json.put("state","waiting")
+      return json
+    }
+    
+    json.put("state",state)
+
+
     for(i <- 0 to (dim_arg.width-1)){
       for(j <- 0 to (dim_arg.height-1)){
         if( floors(players(id).floor).hasBeenSeen(i)(j) == 0){
@@ -89,7 +99,6 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
         }
       }
     }
-    val json:JSONObject = new JSONObject()
     json.put("map",map_json)
     json.put("width",dim_arg.width)
     json.put("height",dim_arg.height)
@@ -127,6 +136,9 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
     json.put("players_info",players_info)
     val monsters_info = new JSONArray()
     for( i <- 0 to (monsters.length -1)){
+      if( monsters(i).lastSeenPos(id) != null && players(id).floor == monsters(i).floor && ((lineOfSight(monsters(i).lastSeenPos(id), players(id).pos, monsters(id).floor)))){
+        monsters(i).lastSeenPos(id) = null
+      }
       if( (monsters(i).floor == players(id).floor && ( lineOfSight(monsters(i).pos, players(id).pos, players(id).floor) || monsters(i).lastSeenPos(id) !=null))){
         val m_json = new JSONObject()
         if(lineOfSight( monsters(i).pos, players(id).pos, players(id).floor)){
@@ -760,7 +772,7 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
   // It is used for collisions
 
   def occupied2players(pos: Position, floor: Int): Boolean = {
-    return (floors(floor)).getFloor()(pos.x)(pos.y).getBlocking || (pos==players(0).pos && floor == players(0).floor)  || (pos==players(1).pos && floor == players(1).floor) || searchMonster(monsters,pos,floor) || searchPNJ(pnjs,pos,floor)
+    return (floors(floor)).getFloor()(pos.x)(pos.y).getBlocking || (pos==players(0).pos && floor == players(0).floor && players(0).collidable)  || (pos==players(1).pos && floor == players(1).floor && players(1).collidable ) || searchMonster(monsters,pos,floor) || searchPNJ(pnjs,pos,floor)
   }
   def occupied2players_safe(pos: Position, floor: Int): Boolean = {
     return (floors(floor)).getFloor()(pos.x)(pos.y).getBlocking || (pos==players(0).pos && floor == players(0).floor)  || (pos==players(1).pos && floor == players(1).floor) || searchMonster(monsters,pos,floor) || searchPNJ(pnjs,pos,floor) || occupied_by_item(pos,floor)
@@ -792,6 +804,16 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
   // It will move items from the ground the hero's inventory if it is not already full
   // and if the hero is "walking" on an item
   def update(t: Int){
+    if(win || lose){
+      return
+    }
+
+    if( players(0).state == State.Dead && players(1).state == State.Dead){
+      lose = true
+      Log.addLogMessage( new LogMessage( List( new SubMessage(" YOU LOSE ", "255000000")) ))
+    }
+
+    
     //filter dead monsters and items and pnjs not on ground
     // we remove items that are not on the ground anymore
     // from the list of items
@@ -821,6 +843,8 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
     // it is an instant win
     if(trueLastBoss.length == 0){
       win = true
+      Log.displayWin()
+      return 
     } 
 
 

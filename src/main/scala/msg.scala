@@ -12,6 +12,9 @@ object MSGTypes {
 
 object MSGHandler {
   def treatMessage(msg: JSONObject, game: GameObject, id_arg: Int){
+    if(game.win == true || game.lose == true || game.players(id_arg).state == State.Dead){
+      return
+    }
     msg.getString("type") match {
       case MSGTypes.Movement => {
         val id = id_arg

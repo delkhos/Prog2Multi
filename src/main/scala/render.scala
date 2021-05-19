@@ -240,8 +240,8 @@ class Renderer {
     // draw weapon
     drawString(g,new Position(istart, jstart-9) , Color.BLACK, SColor.White, tileset_handler.getSize(),"Weapon : ")    
     if(player.getBoolean("hasWeapon")){
-      drawSpriteJSON(g, tileset_handler.getSize(), new Position(istart+10,jstart-10), player.getJSONObject("weapon_sprite"), DOrigin, true)
-      drawString(g,new Position(istart+12, jstart-10) , Color.BLACK, SColor.White, tileset_handler.getSize(),"+"+player.getInt("weapon_damage"))    
+      drawSpriteJSON(g, tileset_handler.getSize(), new Position(istart+10,jstart-9), player.getJSONObject("weapon_sprite"), DOrigin, true)
+      drawString(g,new Position(istart+12, jstart-9) , Color.BLACK, SColor.White, tileset_handler.getSize(),"+"+player.getInt("weapon_damage"))    
     }
     for(i <- istart  to iend){
       for(j <- jstart to jend ){
@@ -387,18 +387,22 @@ class Renderer {
     g.setRenderingHint(java.awt.RenderingHints.KEY_COLOR_RENDERING, java.awt.RenderingHints.VALUE_COLOR_RENDER_SPEED)
 
     clearScreen(g, matrix_dim, tileset_handler.getSize())
-    drawMapJSON(g, current_size, game, dpos)
-    drawPlayers(g, current_size, game, dpos)
-    drawMonstersAndPNJs(g, current_size, game, dpos)
-    drawItems(g, current_size, game, dpos)
-    drawUIJSON(g, matrix_dim, ui_dim, game)
-    drawHover(g, mousepos, mousepos_absolute, game, matrix_dim, ui_dim)
-    printLog(g, matrix_dim, ui_dim, tileset_handler.getSize(), game)
-    // draw ui
-    if(mousepos_absolute.x <= (matrix_dim.width-ui_dim.width-2) && mousepos_absolute.y <= (matrix_dim.height-ui_dim.height-2) && INPUTS.selecting ){
-      paintCharacter(g,9, mousepos, SColor.Yellow,current_size , dpos)
+    val state = game.getString("state")
+    if(state == "playing" ){
+      drawMapJSON(g, current_size, game, dpos)
+      drawPlayers(g, current_size, game, dpos)
+      drawMonstersAndPNJs(g, current_size, game, dpos)
+      drawItems(g, current_size, game, dpos)
+      drawUIJSON(g, matrix_dim, ui_dim, game)
+      drawHover(g, mousepos, mousepos_absolute, game, matrix_dim, ui_dim)
+      printLog(g, matrix_dim, ui_dim, tileset_handler.getSize(), game)
+      // draw ui
+      if(mousepos_absolute.x <= (matrix_dim.width-ui_dim.width-2) && mousepos_absolute.y <= (matrix_dim.height-ui_dim.height-2) && INPUTS.selecting ){
+        paintCharacter(g,9, mousepos, SColor.Yellow,current_size , dpos)
+      }
+    }else {
+    drawString(g, new Position(matrix_dim.width/2-10,matrix_dim.height/2), new Color(255,255,0,170), SColor.Black, tileset_handler.getSize(), "WAITING FOR PLAYER 2")
     }
-    
   }
   
 }

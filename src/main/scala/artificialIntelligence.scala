@@ -11,10 +11,10 @@ abstract class ArtificialIntelligence(){ // definition of the core elements to r
   def chooseTarget(pos: Position,floor: Int, game: GameObject): Player = {
     var t1: Player = null
     var t2: Player = null
-    if(floor == game.players(0).floor && game.lineOfSight(pos,game.players(0).pos, floor) ){
+    if(floor == game.players(0).floor && game.lineOfSight(pos,game.players(0).pos, floor) && game.players(0).state != State.Dead ){
       t1 = game.players(0)
     }
-    if(floor == game.players(1).floor && game.lineOfSight(pos,game.players(1).pos, floor) ){
+    if(floor == game.players(1).floor && game.lineOfSight(pos,game.players(1).pos, floor) && game.players(1).state != State.Dead){
       t2 = game.players(1)
     }
     if(t1 != null && t2 != null){
@@ -34,10 +34,10 @@ abstract class ArtificialIntelligence(){ // definition of the core elements to r
   def chooseTargetOmniscient(pos: Position,floor: Int, game: GameObject): Player = {
     var t1: Player = null
     var t2: Player = null
-    if(floor == game.players(0).floor){
+    if(floor == game.players(0).floor && game.players(0).state != State.Dead){
       t1 = game.players(0)
     }
-    if(floor == game.players(1).floor){
+    if(floor == game.players(1).floor && game.players(1).state != State.Dead){
       t2 = game.players(1)
     }
     if(t1 != null && t2 != null){
@@ -78,7 +78,18 @@ class IdleChaseIA extends ArtificialIntelligence(){
       //println(monster + " " + monster.pos.x + " " + monster.pos.y)
       if(target == null){
         target = chooseTarget(monster.pos,monster.floor, game)
+        if(target==null){
+          lastPlayerSeenPosition = null
+          monster.state = State.Idle
+        }
       }
+      if(target != null && (target.state == State.Dead || target.floor != monster.floor)){
+        target = null
+        lastPlayerSeenPosition = null
+        monster.state = State.Idle
+        println(target)
+      }
+      println(target)
       if(target != null && game.lineOfSight(monster.pos,target.pos, game.current_floor)){ //determines if the monster can see the player
         if(abs(monster.pos.x-target.pos.x) <= 1 && abs(monster.pos.y-target.pos.y)<=1){ //determine if the player is within the attack range
           monster.state = State.Attacking
@@ -96,6 +107,7 @@ class IdleChaseIA extends ArtificialIntelligence(){
         }
         }else if(lastPlayerSeenPosition != null && monster.pos== lastPlayerSeenPosition){ //if the monster loses the track of the player, it will idle again
         target = null
+        lastPlayerSeenPosition = null
         monster.state = State.Idle
       }
       if(monster.state == State.Idle){ //random movement while idling
@@ -173,6 +185,15 @@ class HunterIA extends ArtificialIntelligence(){
       //println(monster + " " + monster.pos.x + " " + monster.pos.y)
       if(target == null){
         target = chooseTargetOmniscient(monster.pos,monster.floor, game)
+        if(target==null){
+          lastPlayerSeenPosition = null
+          monster.state = State.Idle
+        }
+      }
+      if(target != null && (target.state == State.Dead || target.floor != monster.floor)){
+        target = null
+        monster.state = State.Idle
+        lastPlayerSeenPosition = null
       }
       if(target != null ){ //determines if the monster can see the player
         if(abs(monster.pos.x-target.pos.x) <= 1 && abs(monster.pos.y-target.pos.y)<=1){ //determine if the player is within the attack range
@@ -189,9 +210,6 @@ class HunterIA extends ArtificialIntelligence(){
           }
           monster.state = State.Chasing
         }
-        }else if( target.floor != monster.floor){ //if the monster loses the track of the player, it will idle again
-        target = null
-        monster.state = State.Idle
       }
       if(monster.state == State.Idle){ //random movement while idling
         var nextPositions = List((1,1),(1,0),(1,-1),(-1,0),(-1,1),(-1,-1),(0,1),(0,-1))
@@ -242,6 +260,15 @@ class SerpentIA extends ArtificialIntelligence(){
       //println(monster + " " + monster.pos.x + " " + monster.pos.y)
       if(target == null){
         target = chooseTarget(monster.pos,monster.floor, game)
+        if(target==null){
+          lastPlayerSeenPosition = null
+          monster.state = State.Idle
+        }
+      }
+      if(target != null && (target.state == State.Dead || target.floor != monster.floor)){
+        target = null
+        lastPlayerSeenPosition = null
+        monster.state = State.Idle
       }
       if(target != null && game.lineOfSight(monster.pos,target.pos, game.current_floor)){ //determines if the monster can see the player
         if(abs(monster.pos.x-target.pos.x) <= 1 && abs(monster.pos.y-target.pos.y)<=1){ //determine if the player is within the attack range
@@ -260,6 +287,7 @@ class SerpentIA extends ArtificialIntelligence(){
         }
         }else if(lastPlayerSeenPosition != null && monster.pos== lastPlayerSeenPosition){ //if the monster loses the track of the player, it will idle again
         target = null
+        lastPlayerSeenPosition = null
         monster.state = State.Idle
       }
       if(monster.state == State.Idle){ //random movement while idling
@@ -321,6 +349,15 @@ class DragonIA extends ArtificialIntelligence(){
       //println(monster + " " + monster.pos.x + " " + monster.pos.y)
       if(target == null){
         target = chooseTarget(monster.pos,monster.floor, game)
+        if(target==null){
+          lastPlayerSeenPosition = null
+          monster.state = State.Idle
+        }
+      }
+      if(target != null && (target.state == State.Dead || target.floor != monster.floor)){
+        target = null
+        lastPlayerSeenPosition = null
+        monster.state = State.Idle
       }
       if(target != null && game.lineOfSight(monster.pos,target.pos, game.current_floor)){ //determines if the monster can see the player
           monster.state = State.Attacking
@@ -335,6 +372,7 @@ class DragonIA extends ArtificialIntelligence(){
           }
         }else if(lastPlayerSeenPosition != null && monster.pos== lastPlayerSeenPosition){ //if the monster loses the track of the player, it will idle again
         target = null
+        lastPlayerSeenPosition = null
         monster.state = State.Idle
       }
       if(monster.state == State.Idle){

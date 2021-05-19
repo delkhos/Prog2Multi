@@ -108,6 +108,9 @@ object RogueServer {
         val player2_listener = new ListenerPlayer(readerp2, Thread.currentThread(),1)
         player2_listener.start()
         
+        instance.synchronized {
+          instance.state = "playing"
+        }       
 
         while(continue){
           Thread.sleep(10)

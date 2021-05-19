@@ -24,7 +24,8 @@ abstract class Entity (arg_pos: Position, arg_floor: Int, sprite_arg: Sprite) {
  * It also has a state to work as a state machine
  * (and also to know if it is dead)
  */
-abstract class LivingEntity(arg_pos: Position, arg_floor: Int, sprite: Sprite, collidable: Boolean, maxHealth_arg: Int, hitChance: Int, hitDamage: Int, name_arg: String, name_color: String) extends Entity(arg_pos,arg_floor,sprite) {
+abstract class LivingEntity(arg_pos: Position, arg_floor: Int, sprite: Sprite, collidable_arg: Boolean, maxHealth_arg: Int, hitChance: Int, hitDamage: Int, name_arg: String, name_color: String) extends Entity(arg_pos,arg_floor,sprite) {
+  var collidable = collidable_arg
   var health = maxHealth_arg
   var max_health = maxHealth_arg
   val name = new SubMessage(name_arg,name_color)
@@ -99,6 +100,7 @@ abstract class LivingEntity(arg_pos: Position, arg_floor: Int, sprite: Sprite, c
       )
       if (attackee.health<=0) {
         attackee.state = State.Dead
+        attackee.collidable = false
         Log.addLogMessage( new LogMessage( List( attackee.name , new SubMessage(" died.", "255255255"))))
       }
     }else{

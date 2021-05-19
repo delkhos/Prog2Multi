@@ -649,6 +649,7 @@ class Trophy (arg_pos: Position, arg_floor: Int) extends Item (
           )
         )
         game.win = true
+        Log.displayWin()
       }else{
         // if he has allrocks teleport the hero to the secret floor to fight the true last boss
         val pos = new Position(game.r.nextInt(game.dim.width),game.r.nextInt(game.dim.height))

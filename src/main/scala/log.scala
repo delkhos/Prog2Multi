@@ -48,4 +48,24 @@ object Log{ //register the messages to display on screen
     }
     return json
   }
+  def displayWin(){
+    addLogMessage( new LogMessage( List( new SubMessage(" YOU WIN ","255255000") )))
+    addLogMessage( new LogMessage( List(
+      new SubMessage(" C","204000204"), 
+      new SubMessage("O","153000255"), 
+      new SubMessage("N","102000255"),
+      new SubMessage("G","102051255"),
+      new SubMessage("R","102163255"),
+      new SubMessage("A","102204204"), 
+      new SubMessage("T","102255051"),
+      new SubMessage("U","102255000"),
+      new SubMessage("L","255255000"),
+      new SubMessage("A","255204000"),
+      new SubMessage("T","255102000"),
+      new SubMessage("I","255051000"), 
+      new SubMessage("O","255025000"),
+      new SubMessage("N","255000000"),
+      new SubMessage("S","255000000")
+    ) ) )
+  }
 }

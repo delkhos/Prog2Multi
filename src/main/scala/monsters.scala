@@ -162,7 +162,7 @@ class Hoblin() extends Monster(Origin, 0,
 
 class Bat() extends Monster(Origin, 0,
   new Sprite( Array[SubSprite](new SubSprite(293,SColor.BatPurple)), new Color((1.0).toFloat,(1.0).toFloat,(1.0).toFloat,(0.0).toFloat) ),
-  true,14,new IdleChaseIA,90,1,"Bat",SColor.BatPurple,
+  true,14,new IdleChaseIA,90,4,"Bat",SColor.BatPurple,
   5,1, 50, 1){}
 
 class Jormungand() extends Monster(Origin,0,
