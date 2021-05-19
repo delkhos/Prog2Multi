@@ -587,6 +587,8 @@ object ItemFactory{
   var tier2: List[String] = List()
   var tier3: List[String] = List()
  
+  tier1 = "LightningScroll"::tier1
+  /*
   tier1 = "HealingPotion"::tier1
   tier1 = "HealingPotion"::tier1
   tier1 = "HealingPotion"::tier1
@@ -597,6 +599,7 @@ object ItemFactory{
   tier1 = "EnragePotion"::tier1
   tier1 = "FireScroll"::tier1
   tier1 = "EnragePotion"::tier1
+  */
   tier2 = "HealingPotionP"::tier2
   tier2 = "HealingPotionP"::tier2
   tier2 = "HealingPotionP"::tier2

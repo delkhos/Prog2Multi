@@ -87,9 +87,7 @@ class IdleChaseIA extends ArtificialIntelligence(){
         target = null
         lastPlayerSeenPosition = null
         monster.state = State.Idle
-        println(target)
       }
-      println(target)
       if(target != null && game.lineOfSight(monster.pos,target.pos, game.current_floor)){ //determines if the monster can see the player
         if(abs(monster.pos.x-target.pos.x) <= 1 && abs(monster.pos.y-target.pos.y)<=1){ //determine if the player is within the attack range
           monster.state = State.Attacking

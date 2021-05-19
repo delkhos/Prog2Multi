@@ -100,7 +100,6 @@ object INPUTS {
           val jstart = (matrix_dim.height-ui_dim.height-1-(inventory.length/(ui_dim.width-2)+1)-1)-1
           val jend = (matrix_dim.height-ui_dim.height-1)-1
           val inventory_coord = ui_clicked_x-(istart+1)+(ui_clicked_y-(jstart+1))*(iend-istart-1)
-          println( ui_clicked_x+" "+ui_clicked_y+"  "+ inventory_coord+ "  "+ mod )
           if(!selecting){ 
             // if we are not selecting then we are trying to click on inventory
             if(inventory_coord>= 0 && inventory_coord < inventory.length && !inventory.getJSONObject(inventory_coord).getBoolean("empty")){ // the player has clicked on the inventory
@@ -108,11 +107,9 @@ object INPUTS {
               if(mod==0){
                 if(item.getBoolean("targetable")){
                   chose_item = inventory_coord
-                  println("clicked targetable")
                   selecting = true
                 }else{
                   msg.put("type","use")
-                  println("clicked non targetable")
                   msg.put("item",inventory_coord)
                   writer.println(msg.toString())
                 }
@@ -123,7 +120,7 @@ object INPUTS {
               }
             }
           }else{
-            if(ui_clicked_x>max_x || ui_clicked_y > max_y || clicked_x>max_x || clicked_y > max_y || clicked_x<0 || clicked_y < 0){
+            if( ! (ui_clicked_x>max_x || ui_clicked_y > max_y || clicked_x>max_x || clicked_y > max_y || clicked_x<0 || clicked_y < 0)){
               msg.put("type","use_targetable")
               msg.put("item",chose_item)
               msg.put("pos",(new Position(clicked_x,clicked_y)).to_json())
