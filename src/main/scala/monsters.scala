@@ -167,7 +167,7 @@ class Bat() extends Monster(Origin, 0,
 
 class Jormungand() extends Monster(Origin,0,
   new Sprite( Array[SubSprite](new SubSprite(296,SColor.GoblinGreen)), new Color((1.0).toFloat,(1.0).toFloat,(1.0).toFloat,(0.0).toFloat) ),
-  true,50, new IdleChaseIA, 75,6,"Jormungand",SColor.BatPurple,100,3,100,3){}  
+  true,50, new SerpentIA, 75,6,"Jormungand",SColor.BatPurple,100,3,100,3){}  
  
   
 
@@ -232,7 +232,7 @@ class Alpha() extends Monster(Origin, 0,
   ){}
 
 class CavernDrake() extends Monster(Origin, 0,
-  new Sprite( Array[SubSprite] (new SubSprite(298,SColor.Red)),  new Color((1.0).toFloat,(1.0).toFloat,(1.0).toFloat,(0.0).toFloat) ),true,125,new IdleChaseIA,90,8,"Dragon",SColor.Red,
+  new Sprite( Array[SubSprite] (new SubSprite(298,SColor.Red)),  new Color((1.0).toFloat,(1.0).toFloat,(1.0).toFloat,(0.0).toFloat) ),true,125,new DragonIA,90,8,"Dragon",SColor.Red,
   35,2,35,2){}
 
 
@@ -291,14 +291,14 @@ object MonsterFactory{
     roll match {
       case 1 => {
         val boss1 = new Vampire()
-        game.placeMonster(boss1,9)
-        game.tier2Boss = boss1::game.tier1Boss
+        game.placeMonster(boss1,4)
+        game.tier1Boss = boss1::game.tier1Boss
         val boss2 = new Vampire()
-        game.placeMonster(boss2,9)
-        game.tier2Boss = boss2::game.tier1Boss
+        game.placeMonster(boss2,4)
+        game.tier1Boss = boss2::game.tier1Boss
         val boss3 = new Vampire()
-        game.placeMonster(boss3,9)
-        game.tier2Boss = boss3::game.tier1Boss 
+        game.placeMonster(boss3,4)
+        game.tier1Boss = boss3::game.tier1Boss 
       }
 
       case 0 => {
@@ -319,8 +319,8 @@ object MonsterFactory{
       }
       case 1 => {
         val boss = new GoblinKing()
-        game.placeMonster(boss,4)
-        game.tier1Boss = boss::game.tier1Boss
+        game.placeMonster(boss,9)
+        game.tier2Boss = boss::game.tier1Boss
       }
     }
   }

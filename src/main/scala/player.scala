@@ -22,7 +22,9 @@ abstract class Status(sprite: Sprite, argDuration: Int) {
 
 class Poison(sprite: Sprite, argDuration: Int, target: LivingEntity) extends Status(sprite, argDuration){
   override def effect(game:GameObject){
-    target.health -= 2
+    if (duration % 100 == 0){
+      target.health -= 2
+    }
   }
 }
 

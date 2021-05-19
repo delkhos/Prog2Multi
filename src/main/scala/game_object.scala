@@ -785,6 +785,12 @@ def searchPNJ(pnjList: List[QuestGiver], position: Position, floor: Int): Boolea
 
     for(player <- players){
       player.update(t)
+      player.status.foreach( s => { 
+          s.effect(this)
+          s.duration-=1
+      })
+
+      player.status.filter( s => {s.duration >0})
     }
     for(monster <- monsters){
       monster.update(t)
