@@ -4,6 +4,9 @@ import org.json._
 
 object MSGTypes {
   val Movement = "movement"
+  val Use = "use"
+  val UseTargetable = "use_targetable"
+  val Drop = "drop"
 }
 
 
@@ -40,6 +43,22 @@ object MSGHandler {
           }
         }
         game.move(id, new_pos)
+      }
+      case MSGTypes.Use => {
+        val item = msg.getInt("item")          
+        println("used item : ",item)
+        game.players(id_arg).inventory.contents(item).use(game,id_arg)
+      }
+      case MSGTypes.Drop => {
+        val item = msg.getInt("item")          
+        game.players(id_arg).inventory.dropItem(item,game,game.players(id_arg).floor,id_arg)
+      }
+      case MSGTypes.UseTargetable => {
+        val item = msg.getInt("item")          
+        val pos = msg.getJSONObject("pos")          
+        val x = pos.getInt("x")
+        val y = pos.getInt("y")
+        game.players(id_arg).inventory.contents(item).usePos(new Position(x,y),game,id_arg)
       }
       case _ => println("Error : Unknown message")
     }

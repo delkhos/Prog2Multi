@@ -46,6 +46,8 @@ abstract class Item (arg_pos: Position, arg_floor: Int, sprite: Sprite, arg_equi
   def use(game: GameObject, id: Int):Boolean = {
     return false
   }
+  def usePos(mpos: Position, game: GameObject, id: Int){
+  }
 }
 
 abstract class Armor (defense_arg: Int, name: String, color: String, skin: Sprite) extends Item (
@@ -265,7 +267,7 @@ class Sapphire () extends Item (
     override def pickUp(game: GameObject){
       if( game.players(0).pos == pos  && game.players(0).floor == floor ){
         if(game.players(0).canPickUp){
-          game.players(0).inventory.addItem(this)
+          this.on_the_ground = false
           game.players(0).sapphire = true
           game.players(0).canPickUp = false
         }else if( game.players(0).firstSomethingElse){
@@ -278,7 +280,7 @@ class Sapphire () extends Item (
         }
       }else if( game.players(1).pos == pos  && game.players(1).floor == floor ){
         if(game.players(1).canPickUp){
-          game.players(1).inventory.addItem(this)
+          this.on_the_ground = false
           game.players(1).sapphire = true
           game.players(1).canPickUp = false
         }else if( game.players(1).firstSomethingElse){
@@ -302,7 +304,7 @@ class Emerald () extends Item (
     override def pickUp(game: GameObject ){
       if( game.players(0).pos == pos  && game.players(0).floor == floor ){
         if(game.players(0).canPickUp){
-          game.players(0).inventory.addItem(this)
+          this.on_the_ground = false
           if (!game.players(0).emerald){
             game.players(0).max_health = 75
           }
@@ -318,7 +320,7 @@ class Emerald () extends Item (
         }
       }else if( game.players(1).pos == pos  && game.players(1).floor == floor ){
         if(game.players(1).canPickUp){
-          game.players(1).inventory.addItem(this)
+          this.on_the_ground = false
           if (!game.players(1).emerald){
             game.players(1).max_health = 75
           }
@@ -345,7 +347,7 @@ class Ruby () extends Item (
     override def pickUp(game: GameObject ){
       if( game.players(0).pos == pos  && game.players(0).floor == floor ){
         if(game.players(0).canPickUp){
-          game.players(0).inventory.addItem(this)
+          this.on_the_ground = false
           game.players(0).ruby = true
           game.players(0).canPickUp = false
         }else if( game.players(0).firstSomethingElse){
@@ -358,7 +360,7 @@ class Ruby () extends Item (
         }
       }else if( game.players(1).pos == pos  && game.players(1).floor == floor ){
         if(game.players(1).canPickUp ){
-          game.players(1).inventory.addItem(this)
+          this.on_the_ground = false
           game.players(1).ruby = true
           game.players(1).canPickUp = false
         }else if( game.players(1).firstSomethingElse){
@@ -436,7 +438,7 @@ class TeleportScroll () extends Item (
 
   targetable = true
 
-  def usePos(mpos:Position, game_arg:GameObject, id: Int) {
+  override def usePos(mpos:Position, game_arg:GameObject, id: Int) {
     if(!game_arg.occupied2players(mpos,game_arg.players(id).floor)){
       Log.addLogMessage( new LogMessage( List(
           game_arg.players(id).name,
@@ -468,7 +470,7 @@ class LightningScroll () extends Item (
 
   targetable = true
 
-  def usePos(mpos:Position, game_arg:GameObject,id: Int){
+  override def usePos(mpos:Position, game_arg:GameObject,id: Int){
     if(game_arg.lineOfSight(game_arg.players(id).pos,mpos,game_arg.players(id).floor)){
       Log.addLogMessage( new LogMessage( List(
           new SubMessage( "A", SColor.White),
@@ -645,17 +647,28 @@ class DownwardStairs (pos: Position, arg_floor: Int) extends Item (
     //println(game.player.pos + "  "+ pos + "  " + floor + "  " + game.current_floor)
     if( (game.players(0).pos == pos) && (game.players(0).floor == floor) ){
       if(floor == 4 && game.tier1Boss.length == 0){
-        game.players(0).floor+=1
         val stair_pos = game.floors(floor+1).upward_stairs.pos
-        game.players(0).pos = game.closestNonOccupied(stair_pos,floor+1)
+        game.players(0).pos = game.closestNonOccupiedSafe(stair_pos,floor+1)
+        game.players(0).floor+=1
       }else if(floor == 9 && game.tier2Boss.length == 0){
-        game.players(0).floor+=1
         val stair_pos = game.floors(floor+1).upward_stairs.pos
-        game.players(0).pos = game.closestNonOccupied(stair_pos,floor+1)
+        game.players(0).pos = game.closestNonOccupiedSafe(stair_pos,floor+1)
+        game.players(0).floor+=1
       }else if(floor != 4 && floor != 9){
-        game.players(0).floor+=1
         val stair_pos = game.floors(floor+1).upward_stairs.pos
-        game.players(0).pos = game.closestNonOccupied(stair_pos,floor+1)
+        val pos2 = game.closestNonOccupiedSafe(stair_pos,floor+1)
+        printf("stair_pos : ")
+        println(stair_pos)
+        printf("chosen_pos : ")
+        println(pos2)
+        printf("floor = "+ (floor+1) +"  ")
+        printf("stair floor = "+ game.floors(floor+1).upward_stairs.floor +"  ")
+        printf("occupied : " + game.occupied2players_safe(stair_pos,floor+1) + "\n")
+        game.players(0).floor+=1
+        game.players(0).pos = pos2
+        if( stair_pos == pos2){
+          System.exit(0)
+        }
       }else{
       // refuses to be used if the boss still lives
         Log.addLogMessage( new LogMessage( List(
@@ -670,15 +683,15 @@ class DownwardStairs (pos: Position, arg_floor: Int) extends Item (
       if(floor == 4 && game.tier1Boss.length == 0){
         game.players(1).floor+=1
         val stair_pos = game.floors(floor+1).upward_stairs.pos
-        game.players(1).pos = game.closestNonOccupied(stair_pos,floor+1)
+        game.players(1).pos = game.closestNonOccupiedSafe(stair_pos,floor+1)
       }else if(floor == 9 && game.tier2Boss.length == 0){
         game.players(1).floor+=1
         val stair_pos = game.floors(floor+1).upward_stairs.pos
-        game.players(1).pos = game.closestNonOccupied(stair_pos,floor+1)
+        game.players(1).pos = game.closestNonOccupiedSafe(stair_pos,floor+1)
       }else if(floor != 4 && floor != 9){
         game.players(1).floor+=1
         val stair_pos = game.floors(floor+1).upward_stairs.pos
-        game.players(1).pos = game.closestNonOccupied(stair_pos,floor+1)
+        game.players(1).pos = game.closestNonOccupiedSafe(stair_pos,floor+1)
       }else {
       // refuses to be used if the boss still lives
         Log.addLogMessage( new LogMessage( List(
@@ -704,15 +717,24 @@ class UpwardStairs (pos: Position, arg_floor: Int) extends Item (
   0, false){
   
   override def pickUp(game: GameObject){
-    println("c'est moi")
+    /*
+    println("floor P1: "+ game.players(0).floor)
+    printf("pos P1: ")
+    println(game.players(0).pos)
+    println("floor P2: "+ game.players(1).floor)
+    printf("pos P2: ")
+    println(game.players(1).pos)
+    printf("mypos: ")
+    println(pos)
+    */
     if(game.players(0).pos == pos && game.players(0).floor == floor ){
       game.players(0).floor-=1
       val stair_pos = game.floors(floor-1).downward_stairs.pos
-      game.players(0).pos = game.closestNonOccupied(stair_pos,floor+1)
+      game.players(0).pos = game.closestNonOccupiedSafe(stair_pos,floor-1)
     }else if(game.players(1).pos == pos && game.players(1).floor == floor ){
       game.players(1).floor-=1
       val stair_pos = game.floors(floor-1).downward_stairs.pos
-      game.players(1).pos = game.closestNonOccupied(stair_pos,floor+1)
+      game.players(1).pos = game.closestNonOccupiedSafe(stair_pos,floor-1)
     }else {
       //println("on monte pas")
     }

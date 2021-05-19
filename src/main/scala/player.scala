@@ -7,7 +7,7 @@ class Player(pos: Position, sprite: Sprite, collidable: Boolean, maxHealth: Int,
   var firstSomethingElse = true
   move_cd = 100
   move_cd_max = 100
-  armor = new GoldArmor()
+  armor = new LeatherArmor()
   val inventory = new Inventory(12, this)
   def waitAction(){
     Log.addLogMessage( new LogMessage( List(

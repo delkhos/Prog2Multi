@@ -48,6 +48,20 @@ class Inventory(x: Int, owner: Player){ //definition of the inventory that will 
       )
     )
   }
+  def dropItem(item: Int,game: GameObject, floor: Int,  id: Int){
+    val itm_to_drop = contents(item)
+    val amount_to_drop = amount(item)
+    itm_to_drop.on_the_ground = true
+    itm_to_drop.pos = new Position(game.players(id).pos.x,game.players(id).pos.y)
+    itm_to_drop.floor = floor
+    game.items = itm_to_drop::game.items
+    for(i <- 2 to amount_to_drop){
+      val copy =  Class.forName(itm_to_drop.implementationName).newInstance().asInstanceOf[Item] 
+      copy.pos = new Position(game.players(id).pos.x,game.players(id).pos.y)
+      copy.floor = floor
+      game.items = copy::game.items
+    }
+  }
 
   def to_json(): JSONArray = {
     val json = new JSONArray()

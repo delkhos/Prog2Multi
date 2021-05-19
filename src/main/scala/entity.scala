@@ -10,83 +10,8 @@ import java.awt.Graphics2D
 abstract class Entity (arg_pos: Position, arg_floor: Int, sprite_arg: Sprite) {
   var pos = arg_pos
   var floor = arg_floor
-  var lastSeenPos: Position = null
+  var lastSeenPos: Array[Position] = Array(null,null)
   var sprite = sprite_arg
-
-  // This function is used to draw the entity to the screen
-  def draw(g: Graphics2D, current_size: Int, tileset_handler: TileSetHandler, dpos: DPosition){
-    g.setColor(sprite.getBgColor());
-    val size:Float = current_size
-    val sx1:Float = (pos.x)*size +dpos.x //-rx
-    val sy1:Float = (pos.y)*size + dpos.y //-ry 
-    val sx2:Float = sx1 + (size)
-    val sy2:Float = sy1 + (size)
-    g.fillRect(sx1.toInt,sy1.toInt, current_size, current_size)
-
-    val elements = sprite.getElements()
-    for(i <- 0 to (elements.size-1) ){
-      val c = elements(i).getCharCode()
-      val xv:Int = c % 16 
-      val yv:Int = c / 16 
-      val dx1:Int = xv*tileset_handler.getSize() 
-      val dy1:Int = yv*tileset_handler.getSize()
-      val dx2:Int = dx1+(tileset_handler.getSize())
-      val dy2:Int = dy1+(tileset_handler.getSize())
-      g.drawImage(tileset_handler.getColoredTileset(elements(i).getColor()), sx1.toInt, sy1.toInt, sx2.toInt, sy2.toInt, dx1, dy1, dx2, dy2, null)
-    }
-  }
-  // This is an overload of the above function used to draw an entity at a position on the screen
-  // that is not its own position. This is used to draw items in the inventory once they have been picked up
-  def draw(g: Graphics2D, current_size: Int, tileset_handler: TileSetHandler, dpos: DPosition,arg_pos: Position){
-    g.setColor(sprite.getBgColor());
-    val size:Float = current_size
-    val sx1:Float = (arg_pos.x)*size +dpos.x //-rx
-    val sy1:Float = (arg_pos.y)*size + dpos.y //-ry 
-    val sx2:Float = sx1 + (size)
-    val sy2:Float = sy1 + (size)
-    g.fillRect(sx1.toInt,sy1.toInt, current_size, current_size)
-
-    val elements = sprite.getElements()
-    for(i <- 0 to (elements.size-1) ){
-      val c = elements(i).getCharCode()
-      val xv:Int = c % 16 
-      val yv:Int = c / 16 
-      val dx1:Int = xv*tileset_handler.getSize() 
-      val dy1:Int = yv*tileset_handler.getSize()
-      val dx2:Int = dx1+(tileset_handler.getSize())
-      val dy2:Int = dy1+(tileset_handler.getSize())
-      g.drawImage(tileset_handler.getColoredTileset(elements(i).getColor()), sx1.toInt, sy1.toInt, sx2.toInt, sy2.toInt, dx1, dy1, dx2, dy2, null)
-    }
-  }
-  // This is another overload, that does the same as the original, but has 
-  // one more argument, so as to draw a greyer version of the entity
-  def draw(g: Graphics2D, current_size: Int, tileset_handler: TileSetHandler, dpos: DPosition, ratio: Double){
-    val bg = sprite.getBgColor()
-    g.setColor(new Color( ((bg.getRed() * ratio) / 255.0).toFloat , ((bg.getGreen() * ratio)/255.0).toFloat, ((bg.getBlue() * ratio)/ 255.0).toFloat, (bg.getAlpha()/255.0).toFloat   ));
-    val size:Float = current_size
-    val sx1:Float = (lastSeenPos.x)*size + dpos.x //-rx
-    val sy1:Float = (lastSeenPos.y)*size + dpos.y //-ry 
-    val sx2:Float = sx1 + (size)
-    val sy2:Float = sy1 + (size)
-    g.fillRect(sx1.toInt,sy1.toInt, current_size, current_size)
-
-    val elements = sprite.getElements()
-    for(i <- 0 to (elements.size-1) ){
-      val fg = elements(i).getColor()
-      val c = elements(i).getCharCode()
-      val xv:Int = c % 16 
-      val yv:Int = c / 16 
-      val dx1:Int = xv*tileset_handler.getSize() 
-      val dy1:Int = yv*tileset_handler.getSize()
-      val dx2:Int = dx1+(tileset_handler.getSize())
-      val dy2:Int = dy1+(tileset_handler.getSize())
-      val red = "%03d".format((fg.substring(0,3).toInt*ratio).toInt)
-      val green = "%03d".format((fg.substring(3,6).toInt*ratio).toInt)
-      val blue = "%03d".format((fg.substring(6,9).toInt*ratio).toInt)
-      g.drawImage(tileset_handler.getColoredTileset(red+green+blue), sx1.toInt, sy1.toInt, sx2.toInt, sy2.toInt, dx1, dy1, dx2, dy2, null)
-    }
-  }
-  // This function function is used by the renderer so as to draw entities, according to whether or not
 
 }
 

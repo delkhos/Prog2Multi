@@ -151,25 +151,21 @@ class Renderer {
     for(i <- 0 to (monsters.length -1)){
       val monster = monsters.getJSONObject(i)
       val visible: Boolean = monster.getBoolean("visible")
-      if (visible){
-        val pos = monster.getJSONObject("pos")
-        val x = pos.getInt("x")
-        val y = pos.getInt("y")
-        val sprite = monster.getJSONObject("sprite")
-        drawSpriteJSON(g, current_size , new Position(x,y) ,sprite, dpos, visible)
-      }
+      val pos = monster.getJSONObject("pos")
+      val x = pos.getInt("x")
+      val y = pos.getInt("y")
+      val sprite = monster.getJSONObject("sprite")
+      drawSpriteJSON(g, current_size , new Position(x,y) ,sprite, dpos, visible)
     }
     val pnjs = game.getJSONArray("pnjs_info")
     for(i <- 0 to (pnjs.length -1)){
       val pnj = pnjs.getJSONObject(i)
       val visible: Boolean = pnj.getBoolean("visible")
-      if (visible){
-        val pos = pnj.getJSONObject("pos")
-        val x = pos.getInt("x")
-        val y = pos.getInt("y")
-        val sprite = pnj.getJSONObject("sprite")
-        drawSpriteJSON(g, current_size , new Position(x,y) ,sprite, dpos, visible)
-      }
+      val pos = pnj.getJSONObject("pos")
+      val x = pos.getInt("x")
+      val y = pos.getInt("y")
+      val sprite = pnj.getJSONObject("sprite")
+      drawSpriteJSON(g, current_size , new Position(x,y) ,sprite, dpos, visible)
     }
   }
   def drawItems(g: Graphics2D, current_size: Int, game: JSONObject, dpos: DPosition){
@@ -177,13 +173,11 @@ class Renderer {
     for(i <- 0 to (items.length -1)){
       val item = items.getJSONObject(i)
       val visible: Boolean = item.getBoolean("visible")
-      if (visible){
-        val pos = item.getJSONObject("pos")
-        val x = pos.getInt("x")
-        val y = pos.getInt("y")
-        val sprite = item.getJSONObject("sprite")
-        drawSpriteJSON(g, current_size , new Position(x,y) ,sprite, dpos, visible)
-      }
+      val pos = item.getJSONObject("pos")
+      val x = pos.getInt("x")
+      val y = pos.getInt("y")
+      val sprite = item.getJSONObject("sprite")
+      drawSpriteJSON(g, current_size , new Position(x,y) ,sprite, dpos, visible)
     }
   }
 
@@ -401,6 +395,9 @@ class Renderer {
     drawHover(g, mousepos, mousepos_absolute, game, matrix_dim, ui_dim)
     printLog(g, matrix_dim, ui_dim, tileset_handler.getSize(), game)
     // draw ui
+    if(mousepos_absolute.x <= (matrix_dim.width-ui_dim.width-2) && mousepos_absolute.y <= (matrix_dim.height-ui_dim.height-2) && INPUTS.selecting ){
+      paintCharacter(g,9, mousepos, SColor.Yellow,current_size , dpos)
+    }
     
   }
   

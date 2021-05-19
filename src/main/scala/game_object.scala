@@ -127,16 +127,17 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
     json.put("players_info",players_info)
     val monsters_info = new JSONArray()
     for( i <- 0 to (monsters.length -1)){
-      if( (monsters(i).floor == players(id).floor && ( lineOfSight(monsters(i).pos, players(id).pos, players(id).floor) || monsters(i).lastSeenPos!=null))){
+      if( (monsters(i).floor == players(id).floor && ( lineOfSight(monsters(i).pos, players(id).pos, players(id).floor) || monsters(i).lastSeenPos(id) !=null))){
         val m_json = new JSONObject()
         if(lineOfSight( monsters(i).pos, players(id).pos, players(id).floor)){
+          monsters(i).lastSeenPos(id) = new Position(monsters(i).pos.x, monsters(i).pos.y)
           m_json.put("visible",true)
           m_json.put("pos",monsters(i).pos.to_json)
           m_json.put("sprite",monsters(i).sprite.to_json())
         }else {
-          if(monsters(i).lastSeenPos != null){
+          if(monsters(i).lastSeenPos(id) != null){
             m_json.put("visible",false)
-            m_json.put("pos",monsters(i).pos.to_json)
+            m_json.put("pos",monsters(i).lastSeenPos(id).to_json)
             m_json.put("sprite",monsters(i).sprite.to_json())
           }
         }
@@ -149,14 +150,15 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
 
     val pnjs_info = new JSONArray()
     for( i <- 0 to (pnjs.length -1)){
-      if( (pnjs(i).floor == players(id).floor && ( lineOfSight(pnjs(i).pos, players(id).pos, players(id).floor) || pnjs(i).lastSeenPos!=null))){
+      if( (pnjs(i).floor == players(id).floor && ( lineOfSight(pnjs(i).pos, players(id).pos, players(id).floor) || pnjs(i).lastSeenPos(id)!=null))){
         val m_json = new JSONObject()
         if(lineOfSight( pnjs(i).pos, players(id).pos, players(id).floor)){
+          pnjs(i).lastSeenPos(id) = pnjs(i).pos
           m_json.put("visible",true)
           m_json.put("pos",pnjs(i).pos.to_json)
           m_json.put("sprite",pnjs(i).sprite.to_json())
         }else {
-          if(pnjs(i).lastSeenPos != null){
+          if(pnjs(i).lastSeenPos(id) != null){
             m_json.put("visible",false)
             m_json.put("pos",pnjs(i).pos.to_json)
             m_json.put("sprite",pnjs(i).sprite.to_json())
@@ -171,16 +173,17 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
 
     val items_info = new JSONArray()
     for( i <- 0 to (items.length -1)){
-      if( (items(i).floor == players(id).floor && ( lineOfSight(items(i).pos, players(id).pos, players(id).floor) || items(i).lastSeenPos!=null))){
+      if( (items(i).floor == players(id).floor && ( lineOfSight(items(i).pos, players(id).pos, players(id).floor) || items(i).lastSeenPos(id) !=null))){
         val m_json = new JSONObject()
         if(lineOfSight( items(i).pos, players(id).pos, players(id).floor)){
+          items(i).lastSeenPos(id) = items(i).pos
           m_json.put("visible",true)
           m_json.put("pos",items(i).pos.to_json)
           m_json.put("sprite",items(i).sprite.to_json())
         }else {
-          if(items(i).lastSeenPos != null){
+          if(items(i).lastSeenPos(id) != null){
             m_json.put("visible",false)
-            m_json.put("pos",items(i).pos.to_json)
+            m_json.put("pos",items(i).lastSeenPos(id).to_json)
             m_json.put("sprite",items(i).sprite.to_json())
           }
         }
@@ -416,7 +419,7 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
     }
     players(0).pos = pos
     players(0).floor = 0
-    val pos2 = closestNonOccupied(pos,0)
+    val pos2 = closestNonOccupiedSafe(pos,0)
     players(1).pos = pos2
     players(1).floor = 0
   }
@@ -507,19 +510,48 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
     item.floor = floor
     items = item :: items
   }
+  def occupied_by_item(pos: Position, floor: Int): Boolean = {
+    for (itm <- items){
+      if (itm.floor == floor && itm.pos == pos){
+        return true
+      }
+    }
+    return false
+  
+  }
+
+  // This function is used to know if there is a PNJ at a given position
+  def searchPNJ(pnjList: List[QuestGiver], position: Position, floor: Int): Boolean = {
+    pnjList match{
+      case pnj::tl => {
+        return((pnj.pos == position && pnj.floor == floor) || searchPNJ(tl, position,floor))
+      }
+      case emptyList => {return(false)}
+    }
+  }
+  def getPNJ(pnjList: List[QuestGiver], position:Position,floor: Int): QuestGiver = {
+    pnjList match{
+      case m::tl=> { 
+        if (m.pos==position && floor==m.floor){
+          return m        
+        }else { 
+          getPNJ(tl,position,floor)
+        }
+      }
+      case emptyList => { return null }
+    }
+  }
+
+
   // This function is used to test is a position is already occupied by item
   // , so as to avoid item stacking
   def occupied_item_safe(pos: Position, floor: Int):Boolean = {
-    return (floors(floor)).getFloor()(pos.x)(pos.y).getBlocking || items.exists( (itm: Item)=>{
-      return (pos == itm.pos && floor == itm.floor )
-    })
+    return (floors(floor)).getFloor()(pos.x)(pos.y).getBlocking || occupied_by_item(pos,floor)
   }
   // This function is used to test if a position isn't an empty space,
   // and if a questgiver is in this position
   def occupied_item(pos: Position, floor: Int):Boolean = {
-    return (floors(floor)).getFloor()(pos.x)(pos.y).getBlocking || pnjs.exists( (pnj: QuestGiver)=>{
-      return (pos == pnj.pos && floor == pnj.floor )
-    })
+    return (floors(floor)).getFloor()(pos.x)(pos.y).getBlocking || searchPNJ(pnjs, pos, floor)
   }
 
 
@@ -708,16 +740,19 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
       case emptyList => { return(false)}
     }
   }
-  
-  // This function is used to know if there is a PNJ at a given position
-def searchPNJ(pnjList: List[QuestGiver], position: Position, floor: Int): Boolean = {
-    pnjList match{
-      case pnj::tl => {
-        return((pnj.pos == position && pnj.floor == floor) || searchPNJ(tl, position,floor))
+  def getMonster(monsterList: List[Monster], position:Position,floor: Int): Monster = {
+    monsterList match{
+      case m::tl=> { 
+        if (m.pos==position && floor==m.floor){
+          return m        
+        }else { 
+          getMonster(tl,position,floor)
+        }
       }
-      case emptyList => {return(false)}
+      case emptyList => { return null }
     }
   }
+  
   // This function is used to know if a position is occupied by
   // The hero 
   // or a monster 
@@ -728,16 +763,26 @@ def searchPNJ(pnjList: List[QuestGiver], position: Position, floor: Int): Boolea
     return (floors(floor)).getFloor()(pos.x)(pos.y).getBlocking || (pos==players(0).pos && floor == players(0).floor)  || (pos==players(1).pos && floor == players(1).floor) || searchMonster(monsters,pos,floor) || searchPNJ(pnjs,pos,floor)
   }
   def occupied2players_safe(pos: Position, floor: Int): Boolean = {
-    return (floors(floor)).getFloor()(pos.x)(pos.y).getBlocking || (pos==players(0).pos && floor == players(0).floor)  || (pos==players(1).pos && floor == players(1).floor) || searchMonster(monsters,pos,floor) || searchPNJ(pnjs,pos,floor) || items.exists( (itm: Item)=>{
-      return (pos == itm.pos && floor == itm.floor )
-    })
+    return (floors(floor)).getFloor()(pos.x)(pos.y).getBlocking || (pos==players(0).pos && floor == players(0).floor)  || (pos==players(1).pos && floor == players(1).floor) || searchMonster(monsters,pos,floor) || searchPNJ(pnjs,pos,floor) || occupied_by_item(pos,floor)
   }
 
   def move(id: Int, npos: Position){
     if ( ! occupied2players(npos,players(id).floor) && players(id).move_cd == 0) {
       players(id).pos = npos
       players(id).move_cd = players(id).move_cd_max
-    }else{
+    }else if( searchMonster(monsters,npos,players(id).floor)){
+      if(players(id).attack_cd == 0){
+        players(id).attack(getMonster(monsters,npos,players(id).floor))
+        players(id).attack_cd = players(id).attack_cd_max
+      }
+      
+    }else if( searchPNJ(pnjs,npos,players(id).floor)){
+      if(players(id).move_cd == 0){
+        val pnj = getPNJ(pnjs,npos,players(id).floor)
+        pnj.interact(this, id)
+        players(id).move_cd = players(id).move_cd_max
+      }
+      
     }
     players(id).canChangeFloor = true
     players(id).canPickUp = true
@@ -777,10 +822,6 @@ def searchPNJ(pnjList: List[QuestGiver], position: Position, floor: Int): Boolea
     if(trueLastBoss.length == 0){
       win = true
     } 
-
-
-
-
 
 
     for(player <- players){

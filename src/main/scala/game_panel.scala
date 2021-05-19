@@ -46,7 +46,9 @@ class GamePanelDuo(main_frame: MainFrame, socket: Socket ) extends Panel {
   this.preferredSize = new java.awt.Dimension(screen_matrix_dim.width*renderer.getTileSize() , screen_matrix_dim.height*renderer.getTileSize())
   
   override def paintComponent(g : Graphics2D) {
-    renderer.drawGameJSON(g, vars.current_size, screen_matrix_dim, ui_dim, game, vars.dpos, vars.mousepos, vars.mousepos_absolute)
+    game.synchronized{
+      renderer.drawGameJSON(g, vars.current_size, screen_matrix_dim, ui_dim, game, vars.dpos, vars.mousepos, vars.mousepos_absolute)
+    }
   } 
   // LISTENING TO MOUSE AND KEYBOARD
   focusable = true
@@ -60,7 +62,9 @@ class GamePanelDuo(main_frame: MainFrame, socket: Socket ) extends Panel {
   this.reactions += {
     case e => {
       requestFocus()
-      INPUTS.input(writer,e, vars, renderer)
+      game.synchronized{
+        INPUTS.input(writer,e, vars, renderer, game)
+      }
     }
   }
 
