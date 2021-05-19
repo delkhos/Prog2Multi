@@ -1,4 +1,4 @@
-# Slime Adventure !
+# Duo Dungeons !
 ## Tutorial
 ### Movements and actions
 * You can move up down left and right, using the arrow keys.
@@ -14,10 +14,3 @@
 
 ### Goal
 For now the goal is to kill all 4 ennemies of the (only) floor. Once it is done, "trophy" items will spawn all around the map, to win, the player needs to pick one up and use it.
-
-TODO:
-ajouter l'affichage des effets
-ajouter l'affichage d'une description lorsqu'on passe au dessus de quelque chose
-ajouter la sélection, la sélection avec champ de vision
-ajouter quelques items genre firesplash... quelques monstres avec IA stylé,
-ajouter des quêtes.
