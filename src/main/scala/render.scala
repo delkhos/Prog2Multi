@@ -195,6 +195,19 @@ class Renderer {
     }
   }
 
+  def drawStatusJSON(g: Graphics2D, matrix_dim: Dimension, ui_dim: Dimension, game: JSONObject){
+    val id = game.getInt("id")
+    val players = game.getJSONArray("players_info")
+    val player = players.getJSONObject(id)
+    val statuses = player.getJSONArray("status")
+    drawString(g,new Position( matrix_dim.width-ui_dim.width, 7), Color.BLACK  , SColor.White, tileset_handler.getSize(), "STATUSES:")
+    for(i <- 0 to (statuses.length-1)){
+      val sprite = statuses.getJSONObject(i)
+      drawSpriteJSON(g, tileset_handler.getSize(), new Position( matrix_dim.width-ui_dim.width + 2*i, 8  ), sprite , DOrigin, true)
+      
+    }
+  }
+
   def drawUIJSON(g: Graphics2D, matrix_dim: Dimension, ui_dim: Dimension, game: JSONObject){
     // draw lines
     val size = tileset_handler.getSize()
@@ -394,6 +407,7 @@ class Renderer {
       drawMonstersAndPNJs(g, current_size, game, dpos)
       drawItems(g, current_size, game, dpos)
       drawUIJSON(g, matrix_dim, ui_dim, game)
+      drawStatusJSON(g, matrix_dim, ui_dim, game)
       drawHover(g, mousepos, mousepos_absolute, game, matrix_dim, ui_dim)
       printLog(g, matrix_dim, ui_dim, tileset_handler.getSize(), game)
       // draw ui

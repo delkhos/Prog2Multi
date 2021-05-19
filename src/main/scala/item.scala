@@ -233,7 +233,7 @@ class HealingPotionX () extends Item (
 class EnragePotion () extends Item( Origin, 0, new Sprite( Array[SubSprite](new SubSprite(300,SColor.Red)),new Color(0.0f,0.0f,0.0f,0.0f)), false,
   "Enrage Potion", SColor.Red,1, false) {
     override def use(game: GameObject, id:Int):Boolean = {
-      game.players(id).status = (new Enraged(  new Sprite( Array[SubSprite](new SubSprite(300,SColor.Red)),new Color(0.0f,0.0f,0.0f,0.0f)),500,game.players(id) ):: game.players(id).status)
+      game.players(id).status = (new Enraged(  new Sprite( Array[SubSprite](new SubSprite(300,SColor.Red)),new Color(0.0f,0.0f,0.0f,0.0f)),3000,game.players(id) ):: game.players(id).status)
       game.players(id).inventory.amount(pos_in_inventory) -= 1
       if( game.players(id).inventory.amount(pos_in_inventory) == 0 ){
         game.players(id).inventory.contents(pos_in_inventory) = null
@@ -248,7 +248,7 @@ class EnragePotion () extends Item( Origin, 0, new Sprite( Array[SubSprite](new 
 class UnicornHorn () extends Item( Origin, 0, new Sprite( Array[SubSprite](new SubSprite(302,SColor.White)),new Color(0.0f,0.0f,0.0f,0.0f)), false,
   "Unicorn Horn", SColor.White,1, false) {
     override def use(game: GameObject,id: Int):Boolean = {
-      game.players(id).status = (new BronzeSkin(  new Sprite( Array[SubSprite](new SubSprite(31,SColor.Cyan)),new Color(0.0f,0.0f,0.0f,0.0f)),300,game.players(id) ):: game.players(id).status)
+      game.players(id).status = (new BronzeSkin(  new Sprite( Array[SubSprite](new SubSprite(31,SColor.Cyan)),new Color(0.0f,0.0f,0.0f,0.0f)),2000,game.players(id) ):: game.players(id).status)
       game.players(id).inventory.amount(pos_in_inventory) -= 1
       if( game.players(id).inventory.amount(pos_in_inventory) == 0 ){
         game.players(id).inventory.contents(pos_in_inventory) = null
@@ -420,6 +420,32 @@ class FakeWall () extends Item (
       }
     }
 }
+class LifeTotem () extends Item (
+  Origin, 0,
+  new Sprite( Array[SubSprite](new SubSprite(20,SColor.White)),new Color(0.0f,0.0f,0.0f,0.0f)),
+  false,
+  "Life Totem",
+  SColor.White,
+  1, true){
+  override def use(game: GameObject, id: Int):Boolean = {
+    val id2 = (id+1)%2
+    if(game.players(id).pos.dist(game.players(id2).pos) <= 2 && game.players(id).floor == game.players(id2).floor && game.players(id2).state==State.Dead ){
+      game.players(id2).state = State.Idle 
+      game.players(id2).collidable = true
+      game.players(id2).health = game.players(id2).max_health/2
+      game.players(id).inventory.contents(pos_in_inventory) = null
+      game.players(id).inventory.amount(pos_in_inventory) = 0
+      Log.addLogMessage( new LogMessage( List(
+          game.players(id2).name,
+          new SubMessage( " has been resurrected ", SColor.White)
+          )
+        )
+      )
+      return true
+    }
+    return false
+  }
+}
 
 class FireScroll () extends Item (
   Origin, 0,
@@ -569,8 +595,8 @@ object ItemFactory{
   tier1 = "HealingPotion"::tier1
   tier1 = "HealingPotion"::tier1
   tier1 = "EnragePotion"::tier1
-  tier1 = "EnragePotion"::tier1
   tier1 = "FireScroll"::tier1
+  tier1 = "EnragePotion"::tier1
   tier2 = "HealingPotionP"::tier2
   tier2 = "HealingPotionP"::tier2
   tier2 = "HealingPotionP"::tier2

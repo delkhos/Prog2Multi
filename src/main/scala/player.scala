@@ -8,21 +8,27 @@ class Player(pos: Position, sprite: Sprite, collidable: Boolean, maxHealth: Int,
   move_cd = 100
   move_cd_max = 100
   armor = new LeatherArmor()
-  val inventory = new Inventory(12, this)
+  val inventory = new Inventory(12, this) 
+  inventory.addItem( new LifeTotem() )  
   def waitAction(){
     Log.addLogMessage( new LogMessage( List(
       name , new SubMessage(" waited ", "255255255"))))
   }
 }
 
-abstract class Status(sprite: Sprite, argDuration: Int) {
+abstract class Status(sprite_arg: Sprite, argDuration: Int) {
+  val sprite = sprite_arg
   var name = ""
   var duration: Int = argDuration
-  def effect(game: GameObject){}
+  def update(t: Int){
+    duration = (duration-t).max(0)
+  }
+  def effect(){}
 }
 
 class Poison(sprite: Sprite, argDuration: Int, target: LivingEntity) extends Status(sprite, argDuration){
-  override def effect(game:GameObject){
+  override def effect(){
+
     if (duration % 100 == 0){
       target.health -= 2
     }
@@ -31,17 +37,21 @@ class Poison(sprite: Sprite, argDuration: Int, target: LivingEntity) extends Sta
 
 class Enraged(sprite: Sprite, argDuration: Int, target: LivingEntity) extends Status(sprite, argDuration){
   name = "enraged"
+  override def effect(){  
+  }
+
 }
 
 class BronzeSkin(sprite: Sprite, argDuration: Int, target: LivingEntity) extends Status(sprite, argDuration){
   name = "bronzeSkin"
+  override def effect(){  
+  }
+
+
 }
 
-
-
 class HealOverTime(sprite: Sprite, argDuration: Int, target: LivingEntity) extends Status(sprite, argDuration){
-  override def effect(game: GameObject){
-    target.health+= 3
+  override def effect(){
   }
 }
 

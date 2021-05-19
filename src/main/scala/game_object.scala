@@ -131,6 +131,11 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
         p_json.put("hasArmor",false)
       }
       p_json.put("inventory",players(i).inventory.to_json())
+      val status_json = new JSONArray()
+      for(status <- players(id).status){
+        status_json.put(status.sprite.to_json())
+      }
+      p_json.put("status",status_json)
       players_info.put(p_json)
     }
     json.put("players_info",players_info)
@@ -849,13 +854,9 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
 
 
     for(player <- players){
-      player.update(t)
-      player.status.foreach( s => { 
-          s.effect(this)
-          s.duration-=1
-      })
-
-      player.status.filter( s => {s.duration >0})
+      player.update(t) 
+      player.status.foreach( s => { s.update(t) })
+      player.status = player.status.filter( s => {s.duration != 0})
     }
     for(monster <- monsters){
       monster.update(t)
