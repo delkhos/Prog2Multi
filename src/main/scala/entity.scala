@@ -131,13 +131,27 @@ abstract class LivingEntity(arg_pos: Position, arg_floor: Int, sprite: Sprite, c
   def attack( attackee: LivingEntity){ 
     val r = scala.util.Random
     var damage = hitDamage
+
+    var atkmul = 1
+    var defdiv = 1
+    if (status.exists(s => {s.name == "enraged"})){
+      atkmul *= 2
+    }
+
+    if (attackee.status.exists(s => {s.name == "enraged"})){
+      defdiv *= 2
+    }
+    if (attackee.status.exists(s => {s.name == "bronzeSkin"})){
+      defdiv = 0
+    }
+
     if(weapon != null){
       damage += weapon.damage
     
       if (ruby){
         damage += 3
       }
-    }
+    } 
     if(attackee.armor != null){
       damage -= attackee.armor.defense
       if(attackee.sapphire){
@@ -148,6 +162,7 @@ abstract class LivingEntity(arg_pos: Position, arg_floor: Int, sprite: Sprite, c
     }
     val attack_try = r.nextInt(100)
     if(attack_try <= hitChance){
+      damage = damage*defdiv*atkmul
       attackee.health -= damage
       Log.addLogMessage( new LogMessage( List(
         name , new SubMessage(" attacked ", "255255255")

@@ -228,6 +228,35 @@ class HealingPotionX () extends Item (
   }
 }
 
+class EnragePotion () extends Item( Origin, 0, new Sprite( Array[SubSprite](new SubSprite(300,SColor.Red)),new Color(0.0f,0.0f,0.0f,0.0f)), false,
+  "Enrage Potion", SColor.Red,1, false) {
+    override def use(game: GameObject, id:Int):Boolean = {
+      game.players(id).status = (new Enraged(  new Sprite( Array[SubSprite](new SubSprite(300,SColor.Red)),new Color(0.0f,0.0f,0.0f,0.0f)),500,game.players(id) ):: game.players(id).status)
+      game.players(id).inventory.amount(pos_in_inventory) -= 1
+      if( game.players(id).inventory.amount(pos_in_inventory) == 0 ){
+        game.players(id).inventory.contents(pos_in_inventory) = null
+      }
+
+      return true
+    }
+  }
+
+
+
+class UnicornHorn () extends Item( Origin, 0, new Sprite( Array[SubSprite](new SubSprite(302,SColor.White)),new Color(0.0f,0.0f,0.0f,0.0f)), false,
+  "Unicorn Horn", SColor.White,1, false) {
+    override def use(game: GameObject,id: Int):Boolean = {
+      game.players(id).status = (new BronzeSkin(  new Sprite( Array[SubSprite](new SubSprite(31,SColor.Cyan)),new Color(0.0f,0.0f,0.0f,0.0f)),300,game.players(id) ):: game.players(id).status)
+      game.players(id).inventory.amount(pos_in_inventory) -= 1
+      if( game.players(id).inventory.amount(pos_in_inventory) == 0 ){
+        game.players(id).inventory.contents(pos_in_inventory) = null
+      }
+      return true
+    }
+  }
+
+
+
 
 class Hammer () extends Item (
   Origin, 0,
@@ -254,6 +283,8 @@ class Collar() extends Item (
   SColor.White,
   1, false){
 }
+
+
 
 class Sapphire () extends Item (
   Origin, 0,
@@ -527,8 +558,7 @@ object ItemFactory{
   var tier1: List[String] = List()
   var tier2: List[String] = List()
   var tier3: List[String] = List()
-  tier1 = "LightningScroll"::tier1
-  tier1 = "TeleportScroll"::tier1
+ 
   tier1 = "HealingPotion"::tier1
   tier1 = "HealingPotion"::tier1
   tier1 = "HealingPotion"::tier1
@@ -536,11 +566,22 @@ object ItemFactory{
   tier1 = "HealingPotion"::tier1
   tier1 = "HealingPotion"::tier1
   tier1 = "HealingPotion"::tier1
-  tier1 = "HealingPotion"::tier1
+  tier1 = "EnragePotion"::tier1
+  tier1 = "EnragePotion"::tier1
   tier1 = "FireScroll"::tier1
   tier2 = "HealingPotionP"::tier2
+  tier2 = "HealingPotionP"::tier2
+  tier2 = "HealingPotionP"::tier2
+  tier2 = "HealingPotionP"::tier2
+  tier2 = "LightningScroll"::tier2
+  tier2 = "EnragePotion"::tier2
+  tier3 = "TeleportScroll"::tier3
   tier3 = "HealingPotionX"::tier3
-  
+  tier3 = "HealingPotionX"::tier3
+  tier3 = "HealingPotionX"::tier3
+  tier3 = "HealingPotionX"::tier3
+  tier3 = "EnragePotion"::tier3
+
   def spawnItemTier1():Item = {
     val r = scala.util.Random
     return Class.forName("rogue."+tier1(r.nextInt(tier1.length))).newInstance().asInstanceOf[Item] 

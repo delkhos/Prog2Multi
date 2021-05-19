@@ -235,6 +235,10 @@ class CavernDrake() extends Monster(Origin, 0,
   new Sprite( Array[SubSprite] (new SubSprite(298,SColor.Red)),  new Color((1.0).toFloat,(1.0).toFloat,(1.0).toFloat,(0.0).toFloat) ),true,125,new DragonIA,90,8,"Dragon",SColor.Red,
   35,2,35,2){}
 
+class Unicorn() extends Monster (Origin, 0,  new Sprite( Array[SubSprite](new SubSprite(301,SColor.White)), new Color((1.0).toFloat,(1.0).toFloat,(1.0).toFloat,(0.0).toFloat) ), true , 50, new PassiveIA, 0, 0, "Unicorn", SColor.DeepPink, 0, 1, 0, 1){
+  held_items = List(new UnicornHorn())
+}
+
 
 object MonsterFactory{
   // these lists, that can be seen
@@ -246,6 +250,14 @@ object MonsterFactory{
   tier1 = "Hoblin"::tier1
   tier1 = "Hoblin"::tier1
   tier1 = "Hoblin"::tier1
+  tier1 = "Hoblin"::tier1
+  tier1 = "Hoblin"::tier1
+  tier1 = "Hoblin"::tier1
+  tier1 = "Hoblin"::tier1
+  tier1 = "Bat"::tier1
+  tier1 = "Bat"::tier1
+  tier1 = "Bat"::tier1
+  tier1 = "Bat"::tier1
   tier1 = "Bat"::tier1
   tier1 = "Bat"::tier1
   tier1 = "Bat"::tier1
@@ -254,12 +266,34 @@ object MonsterFactory{
   tier1 = "Goblin"::tier1
   tier1 = "Goblin"::tier1
   tier1 = "Goblin"::tier1
-  tier1 = "Hunter"::tier1
+  tier1 = "Goblin"::tier1
+  tier1 = "Goblin"::tier1
+  tier1 = "Goblin"::tier1
+  tier1 = "Goblin"::tier1
+  tier1 = "Unicorn"::tier1
+  
   tier2 = "Hunter"::tier2
+  tier2 = "Hunter"::tier2
+  tier2 = "Hunter"::tier2
+  tier2 = "Hunter"::tier2
+  tier2 = "Hunter"::tier2
+  tier2 = "Hoblin"::tier2
+  tier2 = "Hoblin"::tier2
+  tier2 = "Hoblin"::tier2
   tier2 = "Goblin"::tier2
+  tier2 = "Goblin"::tier2
+  tier2 = "Goblin"::tier2
+  tier2 = "Goblin"::tier2
+  tier2 = "Unicorn"::tier2
+
+
+  tier3 = "Hunter"::tier3
+  tier3 = "Hunter"::tier3
+  tier3 = "Hunter"::tier3
+  tier3 = "Hunter"::tier3
   tier3 = "Hunter"::tier3
   tier3 = "Alpha"::tier3
-  
+  tier3 = "Alpha"::tier3
 
   def spawnMonsterTier1():Monster = {
     val r = scala.util.Random

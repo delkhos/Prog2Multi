@@ -313,7 +313,7 @@ class SerpentIA extends ArtificialIntelligence(){
 }
 
 class DragonIA extends ArtificialIntelligence(){ 
-  var cooldown = 0 
+  var cooldown = 0
   var targetedPos: Position = null
   var lastPlayerSeenPosition: Position = null //it has not seen the player already
   override def processDecision(game: GameObject , monster: Monster){
@@ -323,46 +323,43 @@ class DragonIA extends ArtificialIntelligence(){
         target = chooseTarget(monster.pos,monster.floor, game)
       }
       if(target != null && game.lineOfSight(monster.pos,target.pos, game.current_floor)){ //determines if the monster can see the player
-        lastPlayerSeenPosition = new Position(target.pos.x, target.pos.y) //updates the known player position if the monster can see it
-        if(monster.state == State.Idle){
-          // when the monster spots the player, prints a message in the log stating that event
-          Log.addLogMessage( new LogMessage( List(
-            monster.name , new SubMessage(" spotted ", SColor.White)
-              , target.name )
-            )
-          )
           monster.state = State.Attacking
-        }
-      
-      }else if(lastPlayerSeenPosition != null){ //if the monster loses the track of the player, it will idle again
+          lastPlayerSeenPosition = new Position(target.pos.x, target.pos.y) //updates the known player position if the monster can see it
+          if(monster.state == State.Idle){
+            // when the monster spots the player, prints a message in the log stating that event
+            Log.addLogMessage( new LogMessage( List(
+              monster.name , new SubMessage(" spotted ", SColor.White)
+                , target.name )
+              )
+            )
+          }
+        }else if(lastPlayerSeenPosition != null && monster.pos== lastPlayerSeenPosition){ //if the monster loses the track of the player, it will idle again
         target = null
         monster.state = State.Idle
       }
-      if(monster.state == State.Idle){ //random movement while idling     
-      }else if(monster.state==State.Chasing){
-      }else if(monster.state==State.Attacking){ //the monster attack the player and then turn into a non-attacking state, to avoid unwanted attack with turn-based mechanics
+      if(monster.state == State.Idle){
+      }
+      else if(monster.state==State.Attacking){ //the monster attack the player and then turn into a non-attacking state, to avoid unwanted attack with turn-based mechanics
         if(  monster.attack_cd == 0 ){
           if (cooldown == 0){
-            targetedPos =  new Position(target.pos.x, target.pos.y) 
-            monster.attack_cd = monster.attack_cd_max
+            targetedPos = new Position(target.pos.x, target.pos.y)
 
-          }else{
-            game.players.foreach( player =>  
-                if (game.between(monster.pos,targetedPos, player.pos,game.current_floor) || game.between(monster.pos, player.pos, targetedPos, game.current_floor)){
-                  monster.attack(player)
-                }
-                )
-            monster.attack_cd = monster.attack_cd_max
-
-          } 
+          }
+          if (cooldown == 1){
+            game.players.foreach( player => if (game.between(monster.pos,targetedPos, player.pos,game.current_floor) || game.between(monster.pos, player.pos, targetedPos, game.current_floor)){
+            monster.attack(player)
+          })
         }
-        
-        cooldown += 1
-        cooldown %= 2
+        cooldown+=1
+        cooldown%=2
+
+        monster.attack_cd = monster.attack_cd_max
+        }
       }
     }
   }
 }
+
 
 
 /*
