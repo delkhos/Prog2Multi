@@ -467,7 +467,7 @@ class FireScroll () extends Item (
     game.monsters.foreach( m => {
       val deltax = scala.math.abs(m.pos.x -game.players(id).pos.x) 
       val deltay = scala.math.abs(m.pos.y -game.players(id).pos.y) 
-      if( deltax<=1 && deltay<=1 && m.floor == game.current_floor){
+      if( deltax<=1 && deltay<=1 && m.floor == game.players(id).floor){
         m.takeDamage(20)
       }
     }
@@ -715,7 +715,6 @@ class DownwardStairs (pos: Position, arg_floor: Int) extends Item (
   
   
   override def pickUp(game: GameObject){
-    //println(game.player.pos + "  "+ pos + "  " + floor + "  " + game.current_floor)
     if( (game.players(0).pos == pos) && (game.players(0).floor == floor) ){
       if(floor == 4 && game.tier1Boss.length == 0){
         val stair_pos = game.floors(floor+1).upward_stairs.pos

@@ -88,7 +88,7 @@ class IdleChaseIA extends ArtificialIntelligence(){
         lastPlayerSeenPosition = null
         monster.state = State.Idle
       }
-      if(target != null && game.lineOfSight(monster.pos,target.pos, game.current_floor)){ //determines if the monster can see the player
+      if(target != null && game.lineOfSight(monster.pos,target.pos, target.floor)){ //determines if the monster can see the player
         if(abs(monster.pos.x-target.pos.x) <= 1 && abs(monster.pos.y-target.pos.y)<=1){ //determine if the player is within the attack range
           monster.state = State.Attacking
         }else{
@@ -113,7 +113,7 @@ class IdleChaseIA extends ArtificialIntelligence(){
         val r = scala.util.Random
         var i = r.nextInt(nextPositions.length)
         var delta = nextPositions(i)
-        while( game.occupied2players(monster.pos.translate(delta._1,delta._2),game.current_floor) && nextPositions.length > 0 ) //look for an unoccupied tile around the monster
+        while( game.occupied2players(monster.pos.translate(delta._1,delta._2),monster.floor) && nextPositions.length > 0 ) //look for an unoccupied tile around the monster
         {
           nextPositions = nextPositions.take(i) ++ nextPositions.drop(i + 1)
           if(nextPositions.length > 0){
@@ -130,7 +130,7 @@ class IdleChaseIA extends ArtificialIntelligence(){
           }
         }
       }else if(monster.state==State.Chasing){
-        var path = game.a_star_path(monster.pos, lastPlayerSeenPosition,game.current_floor) //follow the player, using an A* algorithm, see game_object file
+        var path = game.a_star_path(monster.pos, lastPlayerSeenPosition,monster.floor) //follow the player, using an A* algorithm, see game_object file
         if(path!=null && monster.move_cd == 0) {
           monster.pos = path(0)
           monster.move_cd = monster.move_cd_max
@@ -154,7 +154,7 @@ class PassiveIA extends ArtificialIntelligence(){
       val r = scala.util.Random
       var i = r.nextInt(nextPositions.length)
       var delta = nextPositions(i)
-      while( game.occupied2players(monster.pos.translate(delta._1,delta._2),game.current_floor) && nextPositions.length > 0 ) //look for an unoccupied tile around the monster
+      while( game.occupied2players(monster.pos.translate(delta._1,delta._2),monster.floor) && nextPositions.length > 0 ) //look for an unoccupied tile around the monster
       {
         nextPositions = nextPositions.take(i) ++ nextPositions.drop(i + 1)
         if(nextPositions.length > 0){
@@ -214,7 +214,7 @@ class HunterIA extends ArtificialIntelligence(){
         val r = scala.util.Random
         var i = r.nextInt(nextPositions.length)
         var delta = nextPositions(i)
-        while( game.occupied2players(monster.pos.translate(delta._1,delta._2),game.current_floor) && nextPositions.length > 0) //look for an unoccupied tile around the monster
+        while( game.occupied2players(monster.pos.translate(delta._1,delta._2),monster.floor) && nextPositions.length > 0) //look for an unoccupied tile around the monster
         {
           nextPositions = nextPositions.take(i) ++ nextPositions.drop(i + 1)
           if(nextPositions.length > 0){
@@ -231,7 +231,7 @@ class HunterIA extends ArtificialIntelligence(){
           }
         }
       }else if(monster.state==State.Chasing && monster.move_cd == 0){
-        var path = game.a_star_path(monster.pos, lastPlayerSeenPosition,game.current_floor) //follow the player, using an A* algorithm, see game_object file
+        var path = game.a_star_path(monster.pos, lastPlayerSeenPosition,monster.floor) //follow the player, using an A* algorithm, see game_object file
         if(path!=null){
           monster.pos = path(0)
           monster.move_cd = monster.move_cd_max
@@ -268,7 +268,7 @@ class SerpentIA extends ArtificialIntelligence(){
         lastPlayerSeenPosition = null
         monster.state = State.Idle
       }
-      if(target != null && game.lineOfSight(monster.pos,target.pos, game.current_floor)){ //determines if the monster can see the player
+      if(target != null && game.lineOfSight(monster.pos,target.pos, monster.floor)){ //determines if the monster can see the player
         if(abs(monster.pos.x-target.pos.x) <= 1 && abs(monster.pos.y-target.pos.y)<=1){ //determine if the player is within the attack range
           monster.state = State.Attacking
         }else{
@@ -293,7 +293,7 @@ class SerpentIA extends ArtificialIntelligence(){
         val r = scala.util.Random
         var i = r.nextInt(nextPositions.length)
         var delta = nextPositions(i)
-        while( game.occupied2players(monster.pos.translate(delta._1,delta._2),game.current_floor) && nextPositions.length > 0 ) //look for an unoccupied tile around the monster
+        while( game.occupied2players(monster.pos.translate(delta._1,delta._2),monster.floor) && nextPositions.length > 0 ) //look for an unoccupied tile around the monster
         {
           nextPositions = nextPositions.take(i) ++ nextPositions.drop(i + 1)
           if(nextPositions.length > 0){
@@ -310,7 +310,7 @@ class SerpentIA extends ArtificialIntelligence(){
           }
         }
       }else if(monster.state==State.Chasing){
-        var path = game.a_star_path(monster.pos, lastPlayerSeenPosition,game.current_floor) //follow the player, using an A* algorithm, see game_object file
+        var path = game.a_star_path(monster.pos, lastPlayerSeenPosition,monster.floor) //follow the player, using an A* algorithm, see game_object file
         if(path!=null && monster.move_cd == 0) {
           monster.pos = path(0)
           monster.move_cd = monster.move_cd_max
@@ -357,7 +357,7 @@ class DragonIA extends ArtificialIntelligence(){
         lastPlayerSeenPosition = null
         monster.state = State.Idle
       }
-      if(target != null && game.lineOfSight(monster.pos,target.pos, game.current_floor)){ //determines if the monster can see the player
+      if(target != null && game.lineOfSight(monster.pos,target.pos, monster.floor)){ //determines if the monster can see the player
           monster.state = State.Attacking
           lastPlayerSeenPosition = new Position(target.pos.x, target.pos.y) //updates the known player position if the monster can see it
           if(monster.state == State.Idle){
@@ -382,7 +382,7 @@ class DragonIA extends ArtificialIntelligence(){
 
           }
           if (cooldown == 1){
-            game.players.foreach( player => if (game.between(monster.pos,targetedPos, player.pos,game.current_floor) || game.between(monster.pos, player.pos, targetedPos, game.current_floor)){
+            game.players.foreach( player => if (game.between(monster.pos,targetedPos, player.pos,monster.floor) || game.between(monster.pos, player.pos, targetedPos, monster.floor)){
             monster.attack(player)
           })
         }
@@ -397,48 +397,5 @@ class DragonIA extends ArtificialIntelligence(){
 }
 
 
-
-/*
-
-class DragonIA extends ArtificialIntelligence() {
-  var lastPlayerSeenPosition: Position = null
-  var target: Position = null
-  var turnCount: Int = 0
-  var turnMem: Int = 0
-  override def processDecision(game: GameObject , monster: Monster){
-    turnCount += 1
-    turnCount %= 2
-    if(monster.state != State.Dead){
-      if(game.lineOfSight(monster.pos,game.player.pos, game.current_floor)){
-          monster.state = State.Attacking
-          lastPlayerSeenPosition = new Position(game.player.pos.x, game.player.pos.y)
-          if(monster.state == State.Idle){
-            Log.addLogMessage( new LogMessage( List(
-              monster.name , new SubMessage(" spotted ", SColor.White)
-                , game.player.name )
-              )
-            )
-          }
-        }else if(lastPlayerSeenPosition != null && monster.pos== lastPlayerSeenPosition){
-        monster.state = State.Idle
-      }
-      if(monster.state == State.Idle){
-      }
-      else if(monster.state==State.Attacking){
-        if (turnMem == 0){
-          target = new Position(game.player.pos.x, game.player.pos.y)
-        }
-        if (turnMem == 1){
-          if (game.between(monster.pos,target, game.player.pos,game.current_floor) || game.between(monster.pos, game.player.pos, target, game.current_floor)){
-            monster.attack(game.player)
-          }
-        }
-        turnMem+=1
-        turnMem%=2
-      }
-    }
-  }
-}
-*/
 
 

@@ -23,9 +23,6 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
     players(1) = new Player(Origin, new Sprite( Array[SubSprite](new SubSprite(2,SColor.Red), new SubSprite(1,SColor.Black)) , new Color(1.0f,1.0f,1.0f,0.0f)), true, 50, 85, 5,"Player 2",SColor.Red)
   }
 
-  def current_floor(): Int = {
-    return players(0).floor
-  }
 
   var monsters: List[Monster] = List() 
   var pnjs: List[QuestGiver] = List() 
@@ -424,8 +421,8 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
     }
   }
 
-  def getCurrentFloor(): Map = {
-    return floors(current_floor)
+  def getCurrentFloor( id: Int ): Map = {
+    return floors(players(id).floor)
   }
   // This function is used to place the player at a random spot
   def placePlayer(){
@@ -827,7 +824,7 @@ class GameObject(dim_arg: Dimension, last_floor: Int, n_players: Int) {
     // We make all monsters do the action that their AI has decided
     //println("monsters n = "+monsters.length)
     monsters.foreach((m: Monster)=> {
-      if(m.floor == current_floor){
+      if(m.floor == players(0).floor || m.floor == players(1).floor){
           //println(m)
           m.processDecision(this)
       }
